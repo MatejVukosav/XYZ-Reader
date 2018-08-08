@@ -3,6 +3,7 @@ package com.example.xyzreader.ui;
 import android.database.Cursor;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
@@ -36,8 +37,6 @@ public class ArticleDetailActivity extends AppCompatActivity
     @Override
     protected void onCreate( Bundle savedInstanceState ) {
         super.onCreate( savedInstanceState );
-//        getWindow().getDecorView().setSystemUiVisibility( View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-//                View.SYSTEM_UI_FLAG_LAYOUT_STABLE );
         setContentView( R.layout.activity_article_detail );
 
         toolbar = findViewById( R.id.toolbar );
@@ -91,7 +90,7 @@ public class ArticleDetailActivity extends AppCompatActivity
     }
 
     @Override
-    public void onLoadFinished( Loader<Cursor> cursorLoader, Cursor cursor ) {
+    public void onLoadFinished( @NonNull Loader<Cursor> cursorLoader, Cursor cursor ) {
         mCursor = cursor;
         mPagerAdapter.notifyDataSetChanged();
 

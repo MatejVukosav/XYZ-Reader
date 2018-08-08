@@ -17,7 +17,7 @@ public class MyPagerAdapter extends android.support.v4.app.FragmentStatePagerAda
         long getItemId();
     }
 
-    PagerInterface pagerInterface;
+    private PagerInterface pagerInterface;
 
     public MyPagerAdapter( android.support.v4.app.FragmentManager fm, PagerInterface pagerInterface ) {
         super( fm );
@@ -29,7 +29,6 @@ public class MyPagerAdapter extends android.support.v4.app.FragmentStatePagerAda
         super.setPrimaryItem( container, position, object );
         ArticleDetailFragment fragment = (ArticleDetailFragment) object;
         if ( fragment != null ) {
-
             pagerInterface.updateUpButtonPosition( fragment.getUpButtonFloor() );
         }
     }

@@ -24,6 +24,7 @@ import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 import com.example.xyzreader.data.ItemsContract;
 import com.example.xyzreader.data.UpdaterService;
+import com.example.xyzreader.helpers.ImageLoaderHelper;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -200,9 +201,9 @@ public class ArticleListActivity extends AppCompatActivity implements
 
         public ViewHolder( View view ) {
             super( view );
-            thumbnailView = (DynamicHeightNetworkImageView) view.findViewById( R.id.thumbnail );
-            titleView = (TextView) view.findViewById( R.id.article_title );
-            subtitleView = (TextView) view.findViewById( R.id.article_subtitle );
+            thumbnailView = view.findViewById( R.id.thumbnail );
+            titleView = view.findViewById( R.id.article_title );
+            subtitleView = view.findViewById( R.id.article_subtitle );
         }
     }
 }
