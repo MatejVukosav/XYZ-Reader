@@ -10,7 +10,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
-import android.view.ViewGroup;
 
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
@@ -20,7 +19,7 @@ import com.example.xyzreader.data.ItemsContract;
  * An activity representing a single Article detail screen, letting you swipe between articles.
  */
 public class ArticleDetailActivity extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Cursor> {
+        implements LoaderManager.LoaderCallbacks<Cursor>, MyPagerAdapter.PagerInterface {
 
     private Cursor mCursor;
     private long mStartId;
@@ -52,7 +51,7 @@ public class ArticleDetailActivity extends AppCompatActivity
 
         getSupportLoaderManager().initLoader( 0, null, this );
 
-        mPagerAdapter = new MyPagerAdapter( getSupportFragmentManager() );
+        mPagerAdapter = new MyPagerAdapter( getSupportFragmentManager(), this );
         mPager = findViewById( R.id.pager );
         mPager.setAdapter( mPagerAdapter );
         mPager.setPageMargin( (int) TypedValue
@@ -130,30 +129,26 @@ public class ArticleDetailActivity extends AppCompatActivity
         toolbar.setTranslationY( Math.min( mSelectedItemUpButtonFloor - upButtonNormalBottom, 0 ) );
     }
 
-    private class MyPagerAdapter extends android.support.v4.app.FragmentStatePagerAdapter {
-        public MyPagerAdapter( android.support.v4.app.FragmentManager fm ) {
-            super( fm );
-        }
+    @Override
+    public void moveToPosition( int position ) {
+        mCursor.moveToPosition( position );
 
-        @Override
-        public void setPrimaryItem( ViewGroup container, int position, Object object ) {
-            super.setPrimaryItem( container, position, object );
-            ArticleDetailFragment fragment = (ArticleDetailFragment) object;
-            if ( fragment != null ) {
-                mSelectedItemUpButtonFloor = fragment.getUpButtonFloor();
-                updateUpButtonPosition();
-            }
-        }
+    }
 
-        @Override
-        public android.support.v4.app.Fragment getItem( int position ) {
-            mCursor.moveToPosition( position );
-            return ArticleDetailFragment.newInstance( mCursor.getLong( ArticleLoader.Query._ID ) );
-        }
+    @Override
+    public int getCursorSize() {
+        return ( mCursor != null ) ? mCursor.getCount() : 0;
+    }
 
-        @Override
-        public int getCount() {
-            return ( mCursor != null ) ? mCursor.getCount() : 0;
-        }
+    @Override
+    public void updateUpButtonPosition( int selectedItemUpButtonFloor ) {
+        this.mSelectedItemUpButtonFloor = selectedItemUpButtonFloor;
+        updateUpButtonPosition();
+
+    }
+
+    @Override
+    public long getItemId() {
+        return mCursor.getLong( ArticleLoader.Query._ID );
     }
 }
