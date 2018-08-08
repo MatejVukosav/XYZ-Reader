@@ -233,15 +233,21 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
             ImageLoaderHelper.getInstance( getActivity() ).getImageLoader()
                     .get( mCursor.getString( ArticleLoader.Query.PHOTO_URL ), new ImageLoader.ImageListener() {
                         @Override
-                        public void onResponse( ImageLoader.ImageContainer imageContainer, boolean b ) {
+                        public void onResponse( final ImageLoader.ImageContainer imageContainer, boolean b ) {
                             Bitmap bitmap = imageContainer.getBitmap();
                             if ( bitmap != null ) {
-                                Palette p = Palette.generate( bitmap, 12 );
-                                mMutedColor = p.getDarkMutedColor( 0xFF333333 );
-                                mPhotoView.setImageBitmap( imageContainer.getBitmap() );
-                                mRootView.findViewById( R.id.meta_bar )
-                                        .setBackgroundColor( mMutedColor );
-                                updateStatusBar();
+
+                                new Palette.Builder( bitmap ).generate( new Palette.PaletteAsyncListener() {
+                                    @Override
+                                    public void onGenerated( @NonNull Palette palette ) {
+                                        mMutedColor = palette.getDarkMutedColor( 0xFF333333 );
+                                        mPhotoView.setImageBitmap( imageContainer.getBitmap() );
+                                        mRootView.findViewById( R.id.meta_bar )
+                                                .setBackgroundColor( mMutedColor );
+                                        updateStatusBar();
+                                    }
+                                } );
+
                             }
                         }
 
@@ -283,7 +289,7 @@ public class ArticleDetailFragment extends android.support.v4.app.Fragment imple
     }
 
     @Override
-    public void onLoaderReset(@NonNull android.support.v4.content.Loader<Cursor> loader) {
+    public void onLoaderReset( @NonNull android.support.v4.content.Loader<Cursor> loader ) {
         mCursor = null;
         bindViews();
     }
